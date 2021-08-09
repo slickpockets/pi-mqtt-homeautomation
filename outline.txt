@@ -1,0 +1,112 @@
+Thermostat Modes:
+  topic: homeassistant/thermostat/mode/set
+  commands:
+    - off
+    - auto
+    - cool
+    - fan_only
+    - heat
+
+Thermostat States:
+  topic: homeassistant/thermostat/mode/state
+  states:
+    - off
+    - auto
+    - cool
+    - fan_only
+    - heat
+
+Temperature Target:
+  topic: homeassistant/thermostat/temperature/set
+  states:
+    - Any temperature value between 62 and 82.
+
+Temperature Target State:
+  topic: homeassistant/thermostat/temperature/state
+  states:
+    - The currently configured value for the temperature target.
+
+---
+
+Mode and Corresponding Relay States:
+
+off:
+  relay_1: off
+  relay_2: off
+  relay_3: off
+  relay_4: off
+
+auto:
+  - Depends on current state.
+
+cool:
+  relay_1: ON
+  relay_2: ON
+  relay_3: off
+  relay_4: ON
+
+fan_only:
+  relay_1: off
+  relay_2: ON
+  relay_3: off
+  relay_4: off
+
+heat:
+  relay_1: ON
+  relay_2: ON
+  relay_3: ON
+  relay_4: off
+
+
+---
+
+If:
+homeassistant/thermostat/mode/set == "off"
+
+Then:
+1. Turn off all relays.
+2. Publish message "off" to homeassistant/thermostat/mode/state
+
+---
+
+If:
+homeassistant/thermostat/mode/set == "auto"
+
+Then:
+1. First turn off all relays.
+2. Publish message "auto" to homeassistant/thermostat/mode/state
+3. Automatically turn relevant system (aircon/heater/fan) on/off depending on current temp/humidity values.
+
+---
+
+If:
+homeassistant/thermostat/mode/set == "cool"
+
+Then:
+1. First turn off all relays
+2. Publish message "cool" to homeassistant/thermostat/mode/state
+3. Turn on aircon when temperature is ABOVE target set in homeassistant/thermostat/temperature/state
+4. Turn off aircon when temperature is AT OR BELOW target set in homeassistant/thermostat/temperature/state
+
+---
+
+If:
+homeassistant/thermostat/mode/set == "fan_only"
+
+Then:
+1. First turn off all relays
+2. Publish message "fan_only" to homeassistant/thermostat/mode/state
+3. Turn on fan
+
+---
+
+If:
+homeassistant/thermostat/mode/set == "heat"
+
+Then:
+1. First turn off all relays
+2. Publish message "heat" to homeassistant/thermostat/mode/state
+3. Turn ON heater when temperature is BELOW target set in homeassistant/thermostat/temperature/state
+4. Turn OFF heater when temperature is AT OR ABOVE target set in homeassistant/thermostat/temperature/state
+
+---

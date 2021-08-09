@@ -1,1 +1,1 @@
-from app.mqtt.main import *
+from app.mqtt.client import *
