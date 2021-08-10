@@ -1,12 +1,4 @@
-from app.mqtt.client import *
-
-def run():
-    client = connect_mqtt()
-    client.loop_start()
-    pub_temp(client)
-    pub_hum(client)
-    subscribe(client)
-
+from app.mqtt.main import run
 
 
 if __name__ == '__main__':
