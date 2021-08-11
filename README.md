@@ -1,70 +1,14 @@
 ##MQTT broker for home automation
 ## see outline.txt for full info of implementation
-
+# most new work is in gpio.py in working
 todo:
-  - alot
+  - need to make an entry to store the thermostate state (what its set to between 60-80 to base actions upon) (callback on message/topic to store the value in redis for immediate retrival)
+  - integrate it into app
+  - use flask_mqtt for ease of use and access to on_topic callbacks.
+  -refactor to look pretty
+
 
 done:
   -  "homeassistant/thermostat/humidity"
   -  "homeassistant/thermostat/tempature"
-
-
-Thermostat states:
-homeassistant/thermostat/mode/state
-states:
-  - off
-  - auto
-  - cool
-  - fan_only
-  - heat   
-
-
-thermostat commands
- homeassistant/thermostat/mode/set
-commands:
-  - off
-  - auto
-  - cool
-  - fan_only
-  - heat
-
-Temperature Target State:
-  topic: homeassistant/thermostat/temperature/state
-  states:
-  - The currently configured value for the temperature target.
-
-
-Temperature Target:
-  topic: homeassistant/thermostat/temperature/set
-  states:
-    - Any temperature value between 62 and 82.
-
-
-Relay States:
-
-off:
-  relay_1: off
-  relay_2: off
-  relay_3: off
-  relay_4: off
-
-auto:
-  - Depends on current state.
-
-cool:
-  relay_1: ON
-  relay_2: ON
-  relay_3: off
-  relay_4: ON
-
-fan_only:
-  relay_1: off
-  relay_2: ON
-  relay_3: off
-  relay_4: off
-
-heat:
-  relay_1: ON
-  relay_2: ON
-  relay_3: ON
-  relay_4: off
+  - all state change and processing logic done, need ot test on rpi wiht temp sensor.

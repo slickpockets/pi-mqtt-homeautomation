@@ -1,7 +1,9 @@
 from app.mqtt import *
 from app.sensors import *
 from config import config
+from queue import Queue
 
+q=Queue()
 relays = config["RELAY"]
 client = config["CLIENT_ID"]
 # humidity = publish(client, topic="homeassistant/thermostat/humidity", message=str(get_humidity()), interval=10)
