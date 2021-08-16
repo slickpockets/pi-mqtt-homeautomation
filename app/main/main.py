@@ -1,6 +1,6 @@
 from app.mqtt import *
 from app.sensors import *
-from config import config
+from app.config import config
 from queue import Queue
 
 q=Queue()

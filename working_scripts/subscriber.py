@@ -12,9 +12,9 @@ client_id = 'subscriber_thermo'
 username = 'mqtt'
 password = 'mqtt'
 
-        control_topics=["homeassistant/thermostat/temperature/set", "homeassistant/thermostat/mode/state", "homeassistant/thermostat/mode/set", "homeassistant/thermostat/temperature/state"]
+control_topics=["homeassistant/thermostat/temperature/set", "homeassistant/thermostat/mode/state", "homeassistant/thermostat/mode/set", "homeassistant/thermostat/temperature/state"]
 
-def connect_mqtt(client_id, broker, port) -> mqtt_client:
+def connect_mqtt(client_id, broker, port=1883, username=None, password=None) -> mqtt_client:
     def on_connect(client, userdata, flags, rc):
         if rc == 0:
             print("Connected to MQTT Broker!")
@@ -22,7 +22,7 @@ def connect_mqtt(client_id, broker, port) -> mqtt_client:
             print("Failed to connect, return code %d\n", rc)
 
     client = mqtt_client.Client(client_id)
-    #client.username_pw_set(username, password)
+    client.username_pw_set(username, password)
     client.on_connect = on_connect
     client.connect(broker, port)
     return client

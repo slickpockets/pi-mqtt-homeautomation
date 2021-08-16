@@ -1,8 +1,8 @@
 #!/usr/bin/python3
 import smbus
 import pigpio
-from app.mqtt import *
-from app.sensors import *
+# from app.mqtt import *
+# from app.sensors import *
 #array of gpio pins relays are connecetd to so you can change pins easily
 relay_nums = [4,18,23,24]
 
@@ -55,7 +55,7 @@ def fan_function():
 
 def lookup_state():
     ## db.get("homeassistant/thermostat/temperature/state")
-    pass
+    return(66.0)
 
 def get_fTemp():
     bus = smbus.SMBus(1)
@@ -78,24 +78,25 @@ def state_function(state):
     if state == 'off':
         pass
     elif state == "auto":
-        current_temp = get_fTemp()
+        current_temp = float(get_fTemp())
         thermo_temp = lookup_state()
         if current_temp > thermo_temp:
             cool_function()
+            print("cooler")
         elif current_temp <= thermo_temp:
-            heat_function()
+            relaysoff()
         pass
     elif state == "fan_only":
         fan_function()
     elif state == "cool":
-        current_temp = get_fTemp()
+        current_temp = float(get_fTemp())
         thermo_temp = lookup_state()
         if current_temp > thermo_temp:
             cool_function()
         elif current_temp < thermo_temp:
             pass ### all relays off allready
     elif state == "heat":
-        current_temp = get_fTemp()
+        current_temp = float(get_fTemp())
         thermo_temp = lookup_state()
         if current_temp < thermo_temp:
             heat_function()
@@ -105,6 +106,6 @@ def state_function(state):
 
 
 def process_state(state):
-    relayoff()
+    relaysoff()
     client.publish("homeassistant/thermostat/mode/state", state)
     state_function(state)
