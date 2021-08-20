@@ -2,7 +2,7 @@ from paho.mqtt import client as mqtt_client
 import time
 
 from dotenv import dotenv_values
-config = dotenv_values('../.env')
+config = dotenv_values('.env')
 
 
 def connect_mqtt() -> mqtt_client:
@@ -12,10 +12,10 @@ def connect_mqtt() -> mqtt_client:
         else:
             print("Failed to connect, return code %d\n", rc)
 
-    client = mqtt_client.Client(config["CLIENT_ID"])
-    client.username_pw_set(config["USERNAME"], config["PASSWORD"])
+    client = mqtt_client.Client(client_id=config["CLIENT_ID"])
+    client.username_pw_set(username=config["USERNAME"], password=config["PASSWORD"])
     client.on_connect = on_connect
-    client.connect(config["BROKER"], int(config["PORT"]))
+    client.connect(broker=config["BROKER"], port=int(config["PORT"]))
     return client
 
 
@@ -32,7 +32,7 @@ def on_message(client, userdata, message):
         message = q.get()
         print("queue: ",message)
 
-def publish2(client, topic, message):
+def publish(client, topic, message):
     msg_count = 0
     while True:
         time.sleep(1)

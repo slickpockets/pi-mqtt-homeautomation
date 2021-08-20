@@ -1,4 +1,4 @@
-from app.mqtt.main import run
+from app.main.main import run
 
 
 if __name__ == '__main__':
