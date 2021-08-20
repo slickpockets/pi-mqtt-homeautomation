@@ -5,7 +5,7 @@ relays = {"relay_1": relay_nums[0], "relay_2": relay_nums[1], "relay_3": relay_n
 ##on / off statements, not certain if its normally open or closed.
 OFF = 1
 ON = 0
-import client from app.mqtt.client
+from app.mqtt.client import client 
 
 def relaysoff():
     gpio.write(relays["relay_1"], OFF)
