@@ -1,4 +1,5 @@
 import smbus
+import time
 
 def get_fTemp():
     bus = smbus.SMBus(1)
