@@ -7,8 +7,8 @@ import os
 from os.path import join, dirname, realpath
 
 default = Blueprint("default", __name__)
-publish_topics=["homeassistant/thermostat/mode/state", "homeassistant/thermostat/temperature/state" ]
-control_topics=["homeassistant/thermostat/mode/set", "homeassistant/thermostat/temperature/set"]
+publish_topics=["homeassistant/thermostat/mode/state", "homeassistant/thermostat/temperature/state", "homeassistant/thermostat/temperature", "homeassistant/thermostat/humidity" ]
+control_topics=["homeassistant/thermostat/mode/set", "homeassistant/thermostat/temperature/set", 'homeassistant/thermostat/temperature']
 
 for i in control_topics:
     mqtt.subscribe(i, 1)
@@ -26,25 +26,29 @@ def handle_subscribe(client, userdata, mid, granted_qos):
 
 
 @mqtt.on_topic('homeassistant/thermostat/mode/set')
-def handle_progress(client, userdata, message):
+def handle_mode(client, userdata, message):
     msg = message.payload.decode()
     print("topic: {} message {}".format(message.topic, msg))
     if msg is in ["off", "auto", "cool", "fan_only", "heat"]:
         topic = "homeassistant/thermostat/mode/state"
         db.set(topic, msg)
-        process_state(topic, msg)
+        state_function(msg)
 
 
 
 @mqtt.on_topic('homeassistant/thermostat/temperature/set')
-def handle_progress(client, userdata, message):
+def handle_temp_set(client, userdata, message):
     msg = message.payload.decode()
     print("topic: {} message {}".format(message.topic, msg))
     topic = "homeassistant/thermostat/temperature/state"
     db.set(topic, msg)
+    temptature_set(int(msg))
 
-
-    process_state(topic, msg)
+@mqtt.on_topic('homeassistant/thermostat/temperature')
+def handle_temp(client, userdata, message):
+    state = db.get("homeassistant/thermostat/mode/state")
+    if state == "auto":
+        temp_check(int(msg))
 
 
 @mqtt.on_message()

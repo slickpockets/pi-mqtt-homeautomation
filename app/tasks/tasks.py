@@ -14,7 +14,7 @@ def connect_mqtt() -> mqtt_client:
     client.username_pw_set(username=config["USERNAME"], password=config["PASSWORD"])
     client.on_connect = on_connect
     client.connect(config["BROKER"], int(config["PORT"]))
-    return client
+    return client 
 
 
 @celery.task()

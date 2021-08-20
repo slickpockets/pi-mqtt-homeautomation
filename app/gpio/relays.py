@@ -10,7 +10,7 @@ ON = 0
 from app.mqtt.client import client
 =======
 from app.mqtt.client import mqtt_client
- 
+
 >>>>>>> 7a0b5a3ea5f730ebb2a700b727ce200001bfe0a3
 
 def relaysoff():
@@ -58,42 +58,59 @@ def mode_state_lookup():
 ## on off values can be swtiched at top of screen
 def state_function(state):
     if state == 'off':
-        pass
+        relaysoff()
+        ###automatic is my magnum opus, it subscribes to the tempature to constatnly change itself dynamically
+        ## when the desired temp is > 110% of the the current temp, then it will turn the cool funciton on
+        #else when it closes that gap, it goes to fans
     elif state == "auto":
-        current_temp = get_fTemp()
-        thermo_temp = float(temp_state_lookup())
-        if current_temp > thermo_temp:
+        client.subscribe("homeassistant/thermostat/temperature")
+        current_temp = int(get_fTemp())
+        thermo_temp = int(temp_state_lookup())
+        if current_temp  > (thermo_temp*1.1):
+            relaysoff()
             cool_function()
-        elif current_temp <= thermo_temp:
-            heat_function()
-        pass
+            client.publish("homeassistant/thermostat/mode/state", "cool")
+        elif current_temp > thermo_temp:
+            relaysoff()
+            fan_function()
+            client.publish("homeassistant/thermostat/mode/state", "cool")
+        else:
+            pass ## no heat unless its explicit
     elif state == "fan_only":
+        relaysoff()
         fan_function()
+        client.publish("homeassistant/thermostat/mode/state", "fan_only")
     elif state == "cool":
-        current_temp = get_fTemp()
-        thermo_temp = lookup_state()
-        if current_temp > thermo_temp:
-            cool_function()
-        elif current_temp < thermo_temp:
-            pass ### all relays off allready
+        relaysoff()
+        cool_function()
+        client.publish("homeassistant/thermostat/mode/state", "cool")
     elif state == "heat":
-        current_temp = get_fTemp()
-        thermo_temp = lookup_state()
-        if current_temp < thermo_temp:
-            heat_function()
-        elif current_temp >= thermo_temp:
-            pass ### all relays off
+        relaysoff()
+        heat_funciton()
+        client.publish("homeassistant/thermostat/mode/state", "heat")
 
 def temptature_set(value):
-    pass
-
-def process_state(state):
-    if state == 'off':
+    client.publish("homeassistant/thermostat/temperature/state", value)
+    if int(value *1.1) <  get_fTemp():
+        relaysoff()
+        cool_function()
+        client.publish("homeassistant/thermostat/mode/state", "cool")
+    elif int(value) < get_fTemp():
+        relaysoff()
+        fan_function()
+        client.publish("homeassistant/thermostat/mode/state", "fan_only")
+    else:
         pass
-    elif state == "auto":
-        if get_fTemp()
 
-def process_state(topic, state):
-    relaysoff()
-    state_function(state)
-    client.publish(topic, state)
+def temp_check(value):
+    while mode_state_lookup() == "auto":
+        if value+10 < get_fTemp():
+            relaysoff()
+            cool_function()
+            client.publish("homeassistant/thermostat/mode/state", "cool")
+        elif int(value) < get_fTemp():
+            relaysoff()
+            fan_function()
+            client.publish("homeassistant/thermostat/mode/state", "fan_only")
+        else:
+            pass
