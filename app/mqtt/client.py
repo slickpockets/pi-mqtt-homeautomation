@@ -15,7 +15,7 @@ def connect_mqtt() -> mqtt_client:
     client = mqtt_client.Client(client_id=config["CLIENT_ID"])
     client.username_pw_set(username=config["USERNAME"], password=config["PASSWORD"])
     client.on_connect = on_connect
-    client.connect(url=config["BROKER"], port=int(config["PORT"]))
+    client.connect(config["BROKER"], int(config["PORT"]))
     return client
 
 
