@@ -32,12 +32,12 @@ def on_message(client, userdata, message):
         message = q.get()
         print("queue: ",message)
 
-def publish(client, topic, message):
+def publish(client, topic, message, interval):
     msg_count = 0
     while True:
-        time.sleep(1)
+        time.sleep(interval)
         msg = message
-        result = client.publish2(topic, msg)
+        result = client.publish(topic, msg)
         # result: [0, 1]
         status = result[0]
         if status == 0:
