@@ -2,6 +2,7 @@ from app import celery
 from app.sensors.sht30 import *
 from paho.mqtt import client as mqtt_client
 import time
+from config import config 
 
 def connect_mqtt() -> mqtt_client:
     def on_connect(client, userdata, flags, rc):
@@ -14,7 +15,7 @@ def connect_mqtt() -> mqtt_client:
     client.username_pw_set(username=config["USERNAME"], password=config["PASSWORD"])
     client.on_connect = on_connect
     client.connect(config["BROKER"], int(config["PORT"]))
-    return client 
+    return client
 
 
 @celery.task()

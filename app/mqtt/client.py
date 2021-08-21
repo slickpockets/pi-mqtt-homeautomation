@@ -5,7 +5,7 @@ from dotenv import dotenv_values
 config = dotenv_values('.env')
 
 
-    def connect_mqtt() -> mqtt_client:
+def connect_mqtt() -> mqtt_client:
     def on_connect(client, userdata, flags, rc):
         if rc == 0:
             print("Connected to MQTT Broker!")
