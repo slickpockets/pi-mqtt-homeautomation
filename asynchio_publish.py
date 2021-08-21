@@ -31,11 +31,13 @@ async def humidity():
         await asyncio.sleep(15)
         client.publish("homeassistant/thermostat/humidity", get_humidity())
 
-try:
-    loop = asyncio.get_event_loop()
-    asyncio.ensure_future(temp())
-    asyncio.ensure_future(humidity())
-    loop.run_forever()
-except RunTimeError:
 
-    asyncio.set_event_loop(asyncio.new_event_loop())
+if __name__ == "__main___":
+    try:
+        loop = asyncio.get_event_loop()
+        asyncio.ensure_future(temp())
+        asyncio.ensure_future(humidity())
+        loop.run_forever()
+    except RunTimeError:
+
+        asyncio.set_event_loop(asyncio.new_event_loop())
