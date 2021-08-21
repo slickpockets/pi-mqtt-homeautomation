@@ -1,34 +1,5 @@
 import asyncio
 import time
-
-
-
-
-
-if __name__ == "__main___":
-    try:
-        loop = asyncio.get_event_loop()
-        asyncio.ensure_future(temp())
-        asyncio.ensure_future(humidity())
-        loop.run_forever()
-    except RunTimeError:
-
-        asyncio.set_event_loop(asyncio.new_event_loop())
-
-
-
-
-
-
-
-
-
-
-
-
-
-import asyncio
-import time
 from app.sensors.sht30 import get_fTemp, get_humidity
 from dotenv import dotenv_values
 config = dotenv_values('.env')
