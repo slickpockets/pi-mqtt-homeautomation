@@ -156,7 +156,6 @@ def run():
     client.loop_start()
     pub_temp(client)
     pub_hum(client)
-    subscribe(client)
     #pub_temp(client)
 
 
