@@ -141,7 +141,7 @@ async def pub_hum(client):
     while True:
         await asyncio.sleep(15)
         msg = str(get_humidity())
-        topic = "homeassistant/thermostat/humidity"
+            topic = "homeassistant/thermostat/humidity"
         await result = client.publish(topic, msg)
         status = result[0]
         if status == 0:

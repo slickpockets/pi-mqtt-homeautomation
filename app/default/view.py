@@ -29,7 +29,7 @@ def handle_subscribe(client, userdata, mid, granted_qos):
 def handle_mode(client, userdata, message):
     msg = message.payload.decode()
     print("topic: {} message {}".format(message.topic, msg))
-    if msg is in ["off", "auto", "cool", "fan_only", "heat"]:
+    if msg in ["off", "auto", "cool", "fan_only", "heat"]:
         topic = "homeassistant/thermostat/mode/state"
         db.set(topic, msg)
         state_function(msg)

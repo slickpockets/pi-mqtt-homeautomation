@@ -8,6 +8,7 @@ eventlet.monkey_patch()
 mqtt = Mqtt()
 from dotenv import dotenv_values
 config = dotenv_values('.env')
+
 def setupdb(url=config['REDISURL'], password=config['REDISPASS'], db=config['REDISDB'], port=config['REDISPORT']):
     db = redis.StrictRedis(
         host=url,
@@ -40,7 +41,7 @@ def create_app():
     app.config['SECRET'] = ''
     app.config['TEMPLATES_AUTO_RELOAD'] = True
     app.config['MQTT_BROKER_URL'] = config["BROKER"]
-    app.config['MQTT_BROKER_PORT'] = config["PORT"]
+    app.config['MQTT_BROKER_PORT'] = int(config["PORT"])
     app.config['MQTT_USERNAME'] = config["USERNAME"]
     app.config['MQTT_PASSWORD'] = config["PASSWORD"]
     app.config['MQTT_KEEPALIVE'] = 5
@@ -52,7 +53,7 @@ def create_app():
         celery = make_celery(app)
         mqtt.init_app(app)
 
-    from backend.default import default
+    from app.default import default
     app.register_blueprint(default)
 
     return app
