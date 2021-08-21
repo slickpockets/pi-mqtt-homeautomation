@@ -121,13 +121,13 @@ def publish(client):
             print(f"Failed to send message to topic {topic}")
         msg_count += 1
 
-def pub_temp(client):
+async def pub_temp(client):
     msg_count = 0
     while True:
-        time.sleep(10)
+        await asyncio.sleep(15)
         msg = str(get_fTemp())
         topic = "homeassistant/thermostat/temperature"
-        result = client.publish(topic, msg)
+        await result = client.publish(topic, msg)
         status = result[0]
         if status == 0:
             print(f"Send `{msg}` to topic `{topic}`")
@@ -136,13 +136,13 @@ def pub_temp(client):
         msg_count += 1
 
 
-def pub_hum(client):
+async def pub_hum(client):
     msg_count = 0
     while True:
-        time.sleep(10)
+        await asyncio.sleep(15)
         msg = str(get_humidity())
         topic = "homeassistant/thermostat/humidity"
-        result = client.publish(topic, msg)
+        await result = client.publish(topic, msg)
         status = result[0]
         if status == 0:
             print(f"Send `{msg}` to topic `{topic}`")
