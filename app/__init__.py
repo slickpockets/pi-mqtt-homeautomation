@@ -6,8 +6,8 @@ from celery import Celery
 import redis
 eventlet.monkey_patch()
 mqtt = Mqtt()
-from config import config
-
+from dotenv import dotenv_values
+config = dotenv_values('.env')
 def setupdb(url=config['REDISURL'], password=config['REDISPASS'], db=config['REDISDB'], port=config['REDISPORT']):
     db = redis.StrictRedis(
         host=url,
