@@ -1,7 +1,7 @@
 import asyncio
 import time
 from app.sensors.sht30 import get_fTemp, get_humidity
-from config import config
+from config import configb
 
 def connect_mqtt() -> mqtt_client:
     def on_connect(client, userdata, flags, rc):
