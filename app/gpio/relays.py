@@ -8,6 +8,9 @@ OFF = 1
 ON = 0
 from dotenv import dotenv_values
 config = dotenv_values('.env')
+import pigpio
+
+gpio = pigpio.pi()
 
 # from app.mqtt.client import client
 from app.mqtt.client import connect_mqtt
