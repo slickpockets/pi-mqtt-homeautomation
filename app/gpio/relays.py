@@ -89,7 +89,7 @@ def state_function(state):
         client.publish("homeassistant/thermostat/mode/state", "cool")
     elif state == "heat":
         relaysoff()
-        heat_funciton()
+        heat_function()
         client.publish("homeassistant/thermostat/mode/state", "heat")
 
 def temptature_set(value):
