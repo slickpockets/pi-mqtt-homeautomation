@@ -3,7 +3,28 @@ import random
 import functools
 import smbus
 import time
+from paho.mqtt import client as mqtt_client
+import time
 
+from dotenv import dotenv_values
+config = dotenv_values('.env')
+
+
+def connect_mqtt() -> mqtt_client:
+    def on_connect(client, userdata, flags, rc):
+        if rc == 0:
+            print("Connected to MQTT Broker!")
+        else:
+            print("Failed to connect, return code %d\n", rc)
+
+    client = mqtt_client.Client(client_id=config["CLIENT_ID"])
+    client.username_pw_set(username=config["USERNAME"], password=config["PASSWORD"])
+    client.on_connect = on_connect
+    client.connect(config["BROKER"], int(config["PORT"]))
+    return client
+
+client = connect_mqtt()
+    
 def get_fTemp():
     bus = smbus.SMBus(1)
     bus.write_i2c_block_data(0x45, 0x2C, [0x06])
@@ -77,7 +98,7 @@ if __name__ == "__main__":
 
 
 
-# 
+#
 # async def producer(queue):
 #     while True:
 #         emit_me = random.randint(1, 42)
