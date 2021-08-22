@@ -7,6 +7,7 @@ import os
 from os.path import join, dirname, realpath
 
 default = Blueprint("default", __name__)
+
 publish_topics=["homeassistant/thermostat/mode/state", "homeassistant/thermostat/temperature/state", "homeassistant/thermostat/temperature", "homeassistant/thermostat/humidity" ]
 control_topics=["homeassistant/thermostat/mode/set", "homeassistant/thermostat/temperature/set", 'homeassistant/thermostat/temperature']
 
