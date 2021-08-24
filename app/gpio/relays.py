@@ -9,6 +9,7 @@ ON = 0
 from dotenv import dotenv_values
 config = dotenv_values('.env')
 import pigpio
+import logging
 
 gpio = pigpio.pi()
 

@@ -59,3 +59,5 @@ def pub(client, interval, topic, message):
             print(f"Failed to send message to topic {topic}")
         msg_count += 1
         print('message count: {} for {}'.format(msg_count, topic))
+
+client = connect_mqtt()

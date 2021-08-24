@@ -5,7 +5,7 @@ from app.gpio import *
 import json
 import os
 from os.path import join, dirname, realpath
-
+import time
 default = Blueprint("default", __name__)
 
 publish_topics=["homeassistant/thermostat/mode/state", "homeassistant/thermostat/temperature/state", "homeassistant/thermostat/temperature", "homeassistant/thermostat/humidity" ]
@@ -28,12 +28,18 @@ def handle_subscribe(client, userdata, mid, granted_qos):
 
 @mqtt.on_topic('homeassistant/thermostat/mode/set')
 def handle_mode(client, userdata, message):
+    timeout = db.get("timeout")
+    currently = int(time.time())
+    topic = "homeassistant/thermostat/mode/state"
     msg = message.payload.decode()
     print("topic: {} message {}".format(message.topic, msg))
     if msg in ["off", "auto", "cool", "fan_only", "heat"]:
-        topic = "homeassistant/thermostat/mode/state"
-        db.set(topic, msg)
-        state_function(msg)
+        if currently - timeout < 30 and msg != "off":
+            pass
+        else:
+            db.set(topic, msg)
+            db.set("timeout", currently)
+            state_function(msg)
 
 
 
